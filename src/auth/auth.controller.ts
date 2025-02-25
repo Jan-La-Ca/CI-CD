@@ -22,11 +22,11 @@ export class AuthController {
         return new ResponseSuccess({message: "<--------------------> Register Successfully <---------------->"})
     }
     
-    @Post()
-    async createNewRefreshToken(@Query('refreshToken')  refreshToken: string){
-       const data = this.authService.routeRefreshToken(refreshToken)
-       return new ResponseSuccess({data: data, message:"<--------------------> Create Successfully <---------------->" })
-    }
+    // @Post()
+    // async createNewRefreshToken(@Query('refreshToken')  refreshToken: string){
+    //    const data = this.authService.routeRefreshToken(refreshToken)
+    //    return new ResponseSuccess({data: data, message:"<--------------------> Create Successfully <---------------->" })
+    // }
 
     // @Delete("logout")
     // async logOut(@Body('refreshToken') refreshToken: string){
