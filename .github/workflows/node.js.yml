@@ -8,33 +8,76 @@ on:
     branches:
       - main 
 
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
+# Control the number of jobs which run on the time
+concurrency: # Restart process if pushing new commit 
+  group: ${{ github.ref }} # ex: push -> 10:15, push -> 10:20, push -> 10:25 all commit will be a group
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }} # effect all branch expecting main
+  
 jobs:
-  build:
-
+  lint:
     runs-on: ubuntu-latest
+    concurrency:
+      group: lint-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Linter
+        run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+        node-version: [16, 18, 20]
+    concurrency:
+      group: test-${{ github.ref }}
+      cancel-in-progress: true
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: install package
-      run: npm i
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-    - name: run test eslint && prettier
-      run: npm run lint
+      - name: Install dependencies
+        run: npm ci
 
-    - name: run unit test
-      run: npm run test:cov
+      - name: Run Tests
+        run: npm test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    concurrency:
+      group: build-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
