@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post, Query } from '@nestjs/common';
+import { Body, Controller, Post, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
@@ -28,10 +28,10 @@ export class AuthController {
        return new ResponseSuccess({data: data, message:"<--------------------> Create Successfully <---------------->" })
     }
 
-    @Delete("logout")
-    async logOut(@Body('refreshToken') refreshToken: string){
-        await this.authService.removeToken(refreshToken)
-        return new ResponseSuccess({message: "<--------------------> Logout Successfully <---------------->"})
-    }
+    // @Delete("logout")
+    // async logOut(@Body('refreshToken') refreshToken: string){
+    //     await this.authService.removeToken(refreshToken)
+    //     return new ResponseSuccess({message: "<--------------------> Logout Successfully <---------------->"})
+    // }
 }
 
