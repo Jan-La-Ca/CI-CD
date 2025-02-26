@@ -28,10 +28,10 @@ export class AuthController {
        return new ResponseSuccess({data: data, message:"<--------------------> Create Successfully <---------------->" })
     }
 
-    // @Delete("logout")
-    // async logOut(@Body('refreshToken') refreshToken: string){
-    //     await this.authService.removeToken(refreshToken)
-    //     return new ResponseSuccess({message: "<--------------------> Logout Successfully <---------------->"})
-    // }
+    @Delete("logout")
+    async logOut(@Body('refreshToken') refreshToken: string){
+        await this.authService.removeToken(refreshToken)
+        return new ResponseSuccess({message: "<--------------------> Logout Successfully <---------------->"})
+    }
 }
 
