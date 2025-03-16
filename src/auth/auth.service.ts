@@ -94,7 +94,6 @@ export class AuthService {
             update: {id: id, refreshToken: refreshToken}
         })
     }
-
     
     private async findUserByRefreshToken(refreshToken: string){
         return await this.prismaService.tokens.findFirst({

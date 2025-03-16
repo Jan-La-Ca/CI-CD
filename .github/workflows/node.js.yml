@@ -8,20 +8,32 @@ on:
      branches:
        - main
 
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: false
+
+
+# Allows cancel process when pushing a new commit on a branch
+# For example:
+
+#### X-feat, develop pushes a commit on 12:00:00
+#### Job will run after pushing a commit
+### During the process, X-feat which develop pushes a commit on 12:00:05
+### Job will cancel and restarting new job basing on new commit which appears 12:00:05
+
+# concurrency:   
+#   group: ci-${{ github.ref }}
+#   cancel-in-progress: false
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
+    # decompose node version and run in the virtual machine
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
+    #step checkout to version to run test 
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
@@ -31,7 +43,7 @@ jobs:
         cache: 'npm'
 
     - name: install package
-      run: npm i
+      run: npm ci
 
     - name: run test eslint && prettier
       run: npm run lint
