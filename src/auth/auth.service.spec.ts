@@ -136,14 +136,6 @@ describe("Login", () => {
     cryptoService.comparePassword.mockResolvedValue(false)
     await expect(service.login({email: "test@example.com", password: "password123"})).rejects.toThrow(InvalidUserPassword)
   })
-  // it('Should return accessToken, refreshToken and expired', async () => {
-  //   // const mockTokens = { accessToken: 'access_token', exp: 3600, refreshToken: 'refresh_token' };
-  //   // userService.findOne.mockResolvedValue(mockUserData)
-  //   // cryptoService.comparePassword.mockResolvedValue(true)
-
-  //   // expect(service.login).toHaveBeenLastCalledWith({email: "test@example.com",password: "password123"})
-  //   // expect()
-  // })
 })
 
 })
