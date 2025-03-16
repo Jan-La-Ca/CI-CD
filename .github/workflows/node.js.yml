@@ -50,3 +50,6 @@ jobs:
 
     - name: run unit test
       run: npm run test:cov
+    
+    - name: run build
+      run: npm run build
